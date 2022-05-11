@@ -1,0 +1,17 @@
+﻿@model Assignment_MVC.Models.FeverCheckModel
+
+<form asp-action="Fever" method="post" class="form-horizontal" role="form">
+    <div class="form-group">
+        <label asp-for="Temperature"></label>
+        <div class="col-md-5">
+            <input asp-for="Temperature" class="form-control" />
+        </div>
+    </div>
+    <div>
+        @Html.Label("Celcius:")@Html.RadioButtonFor(m => m.TempScale, "Celcius", new { Checked = "checked" })
+        @Html.Label("Fahrenheit:")@Html.RadioButtonFor(m => m.TempScale, "Fahrenheit")
+    </div>
+   
+    <div>@(Model.Fever?"You have a fever":"You do not have a fever")</div>
+    <div>@(Model.Hypothermia?"You have hypothermia!!":"You do not have hypothermia")</div>
+</form>

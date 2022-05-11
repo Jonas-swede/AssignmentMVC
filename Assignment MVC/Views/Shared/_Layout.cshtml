@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="/css/site.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="img-circle"><img src="~/images/Csharp_Logo.png" alt="C# logo" /></div>
+    <div class="topnav">
+        <ul>
+            <li>@Html.ActionLink("About", "About", "Home")</li>
+            <li>@Html.ActionLink("Projects", "Projects", "Home")</li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            <li>@Html.ActionLink("Guessing game", "GuessingGame", "GuessingGame")</li>
+        </ul>
+    </div>
+    
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>@DateTime.Now.ToShortDateString() - Jonas Carlsson</p>
+        </footer>
+    </div>
+</body>
+</html>

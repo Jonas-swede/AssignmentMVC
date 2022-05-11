@@ -1,0 +1,37 @@
+﻿@model Assignment_MVC.Models.GuessingGameModel
+
+<form asp-action="GuessingGame" method="post" class="form-horizontal" role="form">
+    <div>
+        @Html.Label("Guess a number between 1 and 100")
+        @Html.TextBox("Guessednumber", "")
+    </div>
+    <div>
+        @{
+            if (Model.Error == true)
+            {
+                <p id="Error">Error. Enter a valid guess</p>
+            }
+            else
+            {
+                if (Model.Correct == true)
+                {
+                    <p id="win">Congratulations! You guessed correctly</p>
+                }
+                else
+                {
+                    if (Model.High == 2)
+                    {
+                        <p>Too high. Try again.</p>
+                    }
+                    else if(Model.High==1)
+                    { 
+                        <p>Too low. Try again.</p>
+                    }
+
+                    }
+
+                }
+            }
+    </div>
+    
+</form>

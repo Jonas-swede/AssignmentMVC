@@ -1,0 +1,12 @@
+﻿@model Assignment_MVC.Models.Data;
+
+
+<h2>Projects</h2>
+@foreach (var text in Model.Projects) {
+    <h3>
+        <a href="@text.link">@text.title</a>
+    </h3>
+    <p>@text.text</p>
+}
+
+
