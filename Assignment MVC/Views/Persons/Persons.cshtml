@@ -1,5 +1,5 @@
 ﻿@model PersonViewModel
-    
+
 <div class="container" style="margin-top:15px">
     <div class="row">
         <div class="col-4">
@@ -43,29 +43,41 @@
             </form>
         </div>
 
-        
+
     </div>
 </div>
 
 
 
-<table>
-    <tr>
-        <th>Name</th>
-        <th>City</th>
-        <th>Phone number</th>
-        <th></th>
-    </tr>
-        
+<div class="container" id="PersonList">
+    <div class="row">
+        <div class="col-sm">
+            Name
+        </div>
+        <div class="col-sm">
+            City
+        </div>
+        <div class="col-sm">
+            Phone number
+        </div>
+        <div class="col-sm">
+
+        </div>
+    </div>
     @foreach (Person p in Model.Persons)
     {
-        <tr>
-            <td>@p.Name</td>
-            <td>@p.City</td>
-            <td>@p.PhoneNumber</td>
-            <td>@Html.ActionLink("Remove person","RemovePerson", new { p.id})</td>
-        </tr>
+        <div class="row">
+            <partial name="_Person" model="p" />
+        </div>
+
+
     }
-</table>
-    
+</div>
+     
+
+
+
+
+
+
 

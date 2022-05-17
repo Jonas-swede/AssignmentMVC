@@ -1,0 +1,14 @@
+﻿@model Person
+
+<div class="col-sm">
+    @Model.Name
+</div>
+<div class="col-sm">
+    @Model.City
+</div>
+<div class="col-sm">
+    @Model.PhoneNumber
+</div>
+<div class="col-sm">
+    @Html.ActionLink("Remove person", "RemovePerson", new { Model.id })
+</div>
