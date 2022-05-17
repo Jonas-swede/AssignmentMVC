@@ -5,7 +5,8 @@ namespace Assignment_MVC.Controllers
 {
     public class HomeController : Controller
     {
-        Data db = new Data();
+        DataStore db = new DataStore();
+        
 
 
         public IActionResult Projects()

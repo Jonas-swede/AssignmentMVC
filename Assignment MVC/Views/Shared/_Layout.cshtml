@@ -3,17 +3,20 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="/css/site.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div class="img-circle"><img src="~/images/Csharp_Logo.png" alt="C# logo" /></div>
+    <div id ="logo" class="img-circle"><img src="~/images/Csharp_Logo.png" alt="C# logo" /></div>
     <div class="topnav">
         <ul>
             <li>@Html.ActionLink("About", "About", "Home")</li>
             <li>@Html.ActionLink("Projects", "Projects", "Home")</li>
             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
             <li>@Html.ActionLink("Guessing game", "GuessingGame", "GuessingGame")</li>
+            <li>@Html.ActionLink("Fever check", "Fever", "FeverCheck")</li>
+            <li>@Html.ActionLink("Persons", "Persons", "Persons")</li>
         </ul>
     </div>
     

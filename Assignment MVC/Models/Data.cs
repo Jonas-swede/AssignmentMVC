@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Assignment_MVC.Models
 {
-    public class Data
+    public class DataStore
     {
         public List<Project> Projects;
         public string adress = "Some street 1",zipcode="123 45 City";
         public int phoneNr = 12345743;
         
 
-        public Data()
+        public DataStore()
         {
             Projects = new List<Project>();
             Project p = new Project();
@@ -48,7 +49,9 @@ namespace Assignment_MVC.Models
        
         
     }
-     public class Project
+
+    
+    public class Project
     {
         public string link, title, text;
     }

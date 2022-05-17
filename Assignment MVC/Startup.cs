@@ -1,3 +1,4 @@
+using Assignment_MVC.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,9 @@ namespace Assignment_MVC
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
+                
             });
+            services.AddSingleton<IPersonData, InMemoryPersonData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +53,10 @@ namespace Assignment_MVC
                 endpoints.MapControllerRoute(
                     name: "GuessingGame",
                     pattern: "{controller=GuessingGame}/{action=GuessingGame}/{id?}"
+                    );
+                endpoints.MapControllerRoute(
+                    name: "Persons",
+                    pattern: "{controller=Persons}/{action=Persons}/{id?}"
                     );
             });
         }

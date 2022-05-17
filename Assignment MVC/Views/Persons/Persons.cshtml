@@ -1,0 +1,71 @@
+﻿@model PersonViewModel
+    
+<div class="container" style="margin-top:15px">
+    <div class="row">
+        <div class="col-4">
+            <form asp-action="Persons" method="post">
+
+                @Html.DisplayNameFor(m => m.SearchPhrase)
+                @Html.TextBoxFor(m => m.SearchPhrase)
+                <input type="submit" value="Search" name="search" />
+
+            </form>
+        </div>
+        <div id="CreateFrom" class="col-8">
+            <form asp-action="CreatePerson" method="post">
+                <p>
+                    @Html.DisplayNameFor(m => m.newPerson.Name)
+                    @Html.TextBoxFor(m => m.newPerson.Name)
+                </p>
+                <p>
+                    @Html.ValidationMessageFor(m => m.newPerson.Name, "", new { @class = "text-danger" })
+                </p>
+                <p>
+                    @Html.DisplayNameFor(m => m.newPerson.City)
+                    @Html.TextBoxFor(m => m.newPerson.City)
+                </p>
+                <p>
+                    @Html.ValidationMessageFor(m => m.newPerson.City)
+                </p>
+                <p>
+                    @Html.DisplayNameFor(m => m.newPerson.PhoneNumber)
+                    @Html.TextBoxFor(m => m.newPerson.PhoneNumber)
+                </p>
+                <p>
+                    @Html.ValidationMessageFor(m => m.newPerson.PhoneNumber)
+                </p>
+                <p>
+                    <input type="submit" value="Add new person" name="AddNew" />
+                </p>
+
+
+
+            </form>
+        </div>
+
+        
+    </div>
+</div>
+
+
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>City</th>
+        <th>Phone number</th>
+        <th></th>
+    </tr>
+        
+    @foreach (Person p in Model.Persons)
+    {
+        <tr>
+            <td>@p.Name</td>
+            <td>@p.City</td>
+            <td>@p.PhoneNumber</td>
+            <td>@Html.ActionLink("Remove person","RemovePerson", new { p.id})</td>
+        </tr>
+    }
+</table>
+    
+
