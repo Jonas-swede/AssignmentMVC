@@ -18,6 +18,7 @@ namespace Assignment_MVC.Data
         public bool RemovePerson(int id);
 
         public bool EditPerson(int id);
+        public Person GetById(int id);
 
     }
     public class InMemoryPersonData : IPersonData
@@ -36,7 +37,7 @@ namespace Assignment_MVC.Data
             };
         }
 
-        
+
 
         public List<Person> GetAll()
         {
@@ -51,12 +52,17 @@ namespace Assignment_MVC.Data
 
         public bool RemovePerson(int id)
         {
-            return persons.Remove(persons.Single(p=>(p.id)==id));
+            return persons.Remove(persons.Single(p => (p.id) == id));
         }
 
         public bool EditPerson(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public Person GetById(int id)
+        {
+            return persons.Single(p => (p.id) == id);
         }
     }
 }
