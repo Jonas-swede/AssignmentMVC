@@ -52,7 +52,12 @@ namespace Assignment_MVC.Data
 
         public bool RemovePerson(int id)
         {
-            return persons.Remove(persons.Single(p => (p.id) == id));
+            if (persons.Exists(p => (p.id) == id))
+            {
+                return persons.Remove(persons.Single(p => (p.id) == id));
+            }
+            else return false;
+            
         }
 
         public bool EditPerson(int id)
@@ -62,7 +67,12 @@ namespace Assignment_MVC.Data
 
         public Person GetById(int id)
         {
-            return persons.Single(p => (p.id) == id);
+            if (persons.Exists(p => (p.id) == id))
+            {
+                return persons.Single(p => (p.id) == id);
+            }
+            else return null;
+
         }
     }
 }

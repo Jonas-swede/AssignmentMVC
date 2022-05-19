@@ -1,0 +1,83 @@
+﻿
+<div class="container">
+    <div class="row justify-content-center m-2">
+        <div class="col"></div>
+        <div class="col text-center">
+            <button id="ButtonPeople" type="button" class="btn btn-dark">People</button>
+        </div>
+        <div class="col-auto text-center">
+            <input type="text" id="IdInput" />
+            <button id="ButtonDetails" type="button" class="btn btn-dark">Details</button>
+            <button id="ButtonDelete" type="button" class="btn btn-dark">Delete</button>
+          </div>
+        <div class="col"></div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="row border border-dark text-center">
+            <div class="col">Id</div>
+            <div class="col">Name</div>
+            <div class="col">City</div>
+            <div class="col">Phone number</div>
+
+        </div>
+
+        <div id="List" class="border">
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    document.getElementById("ButtonPeople").onclick = (
+        function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/AJAXPersons/People',
+                type: 'GET',
+                dataType: 'html',
+                success: function (result) {
+                    $("#List").html(result);
+                }
+
+            })
+                
+                
+        });
+    document.getElementById("ButtonDelete").onclick = (
+        function (e) {
+            e.preventDefault();
+            var id = document.getElementById("IdInput").value;
+            $.ajax({
+                data: { idInput: id },
+                url: '/AJAXPersons/Delete',
+                type: 'POST',
+                success: function (output) {
+                    var p = document.getElementById("List");
+                    if (output.status == true) {
+                        p.innerHTML = "<p></p><p class=text-center>Person number " + id + " have been deleted</p>";
+
+                    } else {
+                        p.innerHTML = "<p></p><p class=text-center>Person number " + id + " was not found</p>";
+                    }
+                }
+                
+                
+            })
+        });
+    document.getElementById("ButtonDetails").onclick = (
+        function (e) {
+            e.preventDefault();
+            var id = document.getElementById("IdInput").value;
+            console.log(id);
+            $.ajax({
+                data: { idInput: id },
+                url: '/AJAXPersons/Details',
+                type: 'POST',
+                dataType: 'html',
+                success: function (result) {
+                    $("#List").html(result);
+
+                }
+            })
+        });
+        
+</script>

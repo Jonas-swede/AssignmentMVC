@@ -58,6 +58,11 @@ namespace Assignment_MVC
                     name: "Persons",
                     pattern: "{controller=Persons}/{action=Persons}/{id?}"
                     );
+                endpoints.MapControllerRoute(
+                    name: "AJAX",
+                    pattern: "AJAX",
+                    defaults: new {controller="AJAXPersons",action="Index"}
+                    );
             });
         }
     }
