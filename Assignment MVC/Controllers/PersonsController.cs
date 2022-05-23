@@ -54,7 +54,6 @@ namespace Assignment_MVC.Controllers
             if (ModelState.IsValid)
             {
                 Person p = new Person();
-                p.id = persons.Max(t => t.id)+1;
                 p.City = input.newPerson.City;
                 p.Name = input.newPerson.Name;
                 p.PhoneNumber = input.newPerson.PhoneNumber;

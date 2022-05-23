@@ -18,7 +18,7 @@ namespace Assignment_MVC.Models
         public string City { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "Not a valid phone number")]
+        [RegularExpression(@"^\d{9,15}$", ErrorMessage = "Not a valid phone number")]
         public string PhoneNumber { get; set; }
     }
 }
