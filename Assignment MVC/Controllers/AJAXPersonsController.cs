@@ -8,10 +8,12 @@ namespace Assignment_MVC.Controllers
 {
     public class AJAXPersonsController : Controller
     {
-        IPersonData data;
-        public AJAXPersonsController(IPersonData personData)
+        public readonly ApplicationDbContext _context;
+        private readonly PersonData data;
+        public AJAXPersonsController(ApplicationDbContext context)
         {
-            data = personData;
+            _context = context;
+            data = new PersonData(_context);
         }
 
         public ActionResult Index()
@@ -22,6 +24,7 @@ namespace Assignment_MVC.Controllers
         {
             List<Person> persons = new List<Person>();
             persons = data.GetAll();
+            
             PersonViewModel model = new PersonViewModel(persons);
             return PartialView("_AllPeoplePartialView",model);
         }
@@ -32,7 +35,7 @@ namespace Assignment_MVC.Controllers
             int id;
             int.TryParse(idInput, out id);
             Person person = data.GetById(id);
-            
+            person.City = _context.Cities.Find(person.CityID);
             return PartialView("_PersonDetailsPartialView",person);
         }
 

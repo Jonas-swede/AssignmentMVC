@@ -95,7 +95,6 @@ table, th, td {
 
 table {
     width: 70%;
-    display:flex;
     justify-content:center;
 }
 form {
@@ -108,5 +107,10 @@ form {
     border: solid;
 }
 
+#CreateForm{
+    text-align:left;
+}
 
-
+select {
+    float:right;
+}

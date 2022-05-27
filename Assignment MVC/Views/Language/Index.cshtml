@@ -1,0 +1,51 @@
+﻿@model LangaugeViewModel
+
+<h1>Languages</h1>
+
+<a asp-action="Create">Add language</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Language</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Languages)
+            {
+                <tr>
+                    <td>@item.LanguageName</td>
+                    <td><a asp-action="Remove" asp-route-languageName="@item.LanguageName">Remove language</a></td>
+                </tr>
+            }
+    </tbody>
+</table>
+
+<p></p>
+<h1>Persons</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Person</th>
+            <th>Languages</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.People)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        @foreach (var lang in item.PersonLanguages)
+                        {
+                            <p>@lang.LanguageName</p>
+                        }
+                    </td>
+                    
+                </tr>
+            }
+    </tbody>
+</table>
+

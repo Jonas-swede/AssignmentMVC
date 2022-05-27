@@ -20,5 +20,7 @@ namespace Assignment_MVC.Models
         [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"^\d{9,15}$", ErrorMessage = "Not a valid phone number")]
         public string PhoneNumber { get; set; }
+
+        public string Language { get; set; }
     }
 }

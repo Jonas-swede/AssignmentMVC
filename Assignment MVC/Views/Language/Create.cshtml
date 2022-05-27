@@ -1,0 +1,13 @@
+﻿@model Language
+
+<h1>Add language</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="LanguageName"></label>
+        <input asp-for="LanguageName" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Add language" class="btn btn-primary" />
+    </div>
+</form>

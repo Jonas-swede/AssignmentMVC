@@ -22,7 +22,11 @@
                 </p>
                 <p>
                     @Html.DisplayNameFor(m => m.newPerson.City)
-                    @Html.TextBoxFor(m => m.newPerson.City)
+                    <select asp-for="newPerson.City" class="form-control" asp-items="ViewBag.CityName"></select>
+                </p>
+                <p>
+                    @Html.DisplayName("First language")
+                    <select asp-for="@Model.newPerson.Language" class="form-control" asp-items="ViewBag.Languages"></select>
                 </p>
                 <p>
                     @Html.ValidationMessageFor(m => m.newPerson.City)
@@ -59,6 +63,9 @@
         </div>
         <div class="col-sm">
             Phone number
+        </div>
+        <div class="col-sm">
+            Language
         </div>
         <div class="col-sm">
 

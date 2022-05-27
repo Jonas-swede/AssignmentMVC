@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace Assignment_MVC.Models
 {
-    public class Person
+    public class Language
     {
         [Key]
-        public int id { get; set; }
-        public string Name { get; set; }
-        public int CityID { get; set; }
-        public City City { get; set; }
-        public string PhoneNumber { get; set; }
+        public string LanguageName { get; set; }
         public List<PersonLanguage> PersonLanguages { get; set; }
-
     }
 }

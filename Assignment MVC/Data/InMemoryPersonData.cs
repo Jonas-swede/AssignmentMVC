@@ -17,9 +17,9 @@ namespace Assignment_MVC.Data
         {
             persons = new List<Person>()
             {
-                new Person {id=1,Name="Kalle",City="Stad 1",PhoneNumber="01234562"},
-                new Person {id=2,Name="Sten",City="Stad 2",PhoneNumber="01698941"},
-                new Person {id=3,Name="Börje",City="Stad 3",PhoneNumber="016161814"}
+                new Person {id=1,Name="Kalle",City=new City{CityName="Stad 1" },PhoneNumber="01234562"},
+                new Person {id=2,Name="Sten",City=new City{CityName="Stad 2" },PhoneNumber="01698941"},
+                new Person {id=3,Name="Börje",City=new City{CityName="Stad 3" },PhoneNumber="016161814"}
             };
         }
 

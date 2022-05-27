@@ -30,7 +30,7 @@ namespace Assignment_MVC
             });
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IPersonData, ApplicationDbContext>();
+            services.AddScoped<IPersonData, PersonData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,6 +72,20 @@ namespace Assignment_MVC
                     pattern: "AJAX",
                     defaults: new {controller="AJAXPersons",action="Index"}
                     );
+                endpoints.MapControllerRoute(
+                    name: "Cities",
+                    pattern: "{controller=Cities}/{action=Index}/{id?}"
+                    );
+                endpoints.MapControllerRoute(
+                    name: "Countries",
+                    pattern: "{controller=Countries}/{action=Index}/{id?}"
+                    );
+                endpoints.MapControllerRoute(
+                    name: "Languages",
+                    pattern: "{controller=Language}/{action=Index}/{id?}"
+                    );
+                
+
             });
         }
     }
