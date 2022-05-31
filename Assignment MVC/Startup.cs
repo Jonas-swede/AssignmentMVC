@@ -1,4 +1,5 @@
 using Assignment_MVC.Data;
+using Assignment_MVC.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,11 @@ namespace Assignment_MVC
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IPersonData, PersonData>();
+
+            services.AddTransient<IPersonService, PersonService>();
+            services.AddTransient<ICityServices, CityServices>();
+            services.AddTransient<ILanguageServices, LanguageServices>();
+            services.AddTransient<IPersonLanguageServices, PersonLanguageServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

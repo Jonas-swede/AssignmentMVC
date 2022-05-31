@@ -3,16 +3,19 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Assignment_MVC.Models;
 using System.Collections.Generic;
+using Assignment_MVC.Services;
 
 namespace Assignment_MVC.Controllers
 {
     public class AJAXPersonsController : Controller
     {
         public readonly ApplicationDbContext _context;
+        private readonly IPersonService _personService;
         private readonly PersonData data;
-        public AJAXPersonsController(ApplicationDbContext context)
+        public AJAXPersonsController(ApplicationDbContext context, IPersonService personService)
         {
             _context = context;
+            _personService = personService;
             data = new PersonData(_context);
         }
 
@@ -23,7 +26,7 @@ namespace Assignment_MVC.Controllers
         public ActionResult People()
         {
             List<Person> persons = new List<Person>();
-            persons = data.GetAll();
+            persons = _personService.GetAll();
             
             PersonViewModel model = new PersonViewModel(persons);
             return PartialView("_AllPeoplePartialView",model);
@@ -34,7 +37,7 @@ namespace Assignment_MVC.Controllers
         {
             int id;
             int.TryParse(idInput, out id);
-            Person person = data.GetById(id);
+            Person person = _personService.ReadPerson(id);
             person.City = _context.Cities.Find(person.CityID);
             return PartialView("_PersonDetailsPartialView",person);
         }
@@ -44,7 +47,7 @@ namespace Assignment_MVC.Controllers
         {
             int id;
             bool statusCode = false;
-            if (int.TryParse(idInput, out id)) statusCode=data.RemovePerson(id);
+            if (int.TryParse(idInput, out id)) statusCode=_personService.DeletePerson(id);
               
             return Json(new { status = statusCode });
         }

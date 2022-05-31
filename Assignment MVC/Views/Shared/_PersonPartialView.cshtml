@@ -18,7 +18,7 @@
 
         <h5>Add new language</h5>
         <form asp-action="AddLanguage" method="post">
-            <select asp-for="@Model.PersonLanguages[0].LanguageName" class="form-control" asp-items="ViewBag.Languages"></select>
+            <select asp-for="@Model.PersonLanguages[0].LanguageId" class="form-control" asp-items="ViewBag.Languages"></select>
             @Html.HiddenFor(p => p.id)
             <input type="submit" value="Add langauge" class="btn btn-secondary" />
         </form>

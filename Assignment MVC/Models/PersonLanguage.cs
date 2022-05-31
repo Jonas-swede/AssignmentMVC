@@ -8,6 +8,8 @@ namespace Assignment_MVC.Models
 {
     public class PersonLanguage
     {
+
+        public int LanguageId { get; set; }
         public string LanguageName { get; set; }
         public Language Language { get; set; }
         public int Personid { get; set; }

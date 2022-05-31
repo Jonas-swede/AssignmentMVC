@@ -1,5 +1,6 @@
 ﻿using Assignment_MVC.Data;
 using Assignment_MVC.Models;
+using Assignment_MVC.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -11,48 +12,42 @@ namespace Assignment_MVC.Controllers
 {
     public class PersonsController : Controller
     {
-        public readonly ApplicationDbContext _context;
-        private readonly PersonData data;
+        private readonly IPersonService _personService;
+        private readonly ILanguageServices _languageServices;
+        private readonly ICityServices _cityServices;
+        private readonly IPersonLanguageServices _personLanguageServices;
         
-        public PersonsController(ApplicationDbContext context)
+        public PersonsController(IPersonService personService,ILanguageServices languageServices,ICityServices cityServices, IPersonLanguageServices personLanguageServices)
         {
-            _context = context;
-            data = new PersonData(_context);
+            _personService = personService;
+            _languageServices = languageServices;
+            _cityServices = cityServices;
+            _personLanguageServices = personLanguageServices;
+            
         }
         
         
         public IActionResult Persons()
         {
-            ViewData["CityName"] = new SelectList(_context.Cities, "CityName", "CityName");
-            ViewData["Languages"] = new SelectList(_context.Language, "LanguageName", "LanguageName");
+            ViewData["CityName"] = new SelectList(_cityServices.GetAll(), "CityName", "CityName");
+            ViewData["Languages"] = new SelectList(_languageServices.GetAll(), "LanguageName", "LanguageName");
             List<Person> persons = new List<Person>();
-            persons = data.GetAll();
+            persons = _personService.GetAll();
             
             PersonViewModel model = new PersonViewModel(persons);
-            foreach(Person p in model.Persons)
-            {
-                p.PersonLanguages = _context.Set<PersonLanguage>().Where(l => l.Personid == p.id).ToList();
-            }
-            model.SearchPhrase = data.SearchString != null ? data.SearchString:null;
+            
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Persons(string SearchPhrase)
         {
-            PersonViewModel model = new PersonViewModel(data.GetAll());
-            if (SearchPhrase != null) { 
-                model.Persons = model.Persons.Where(
-                    p =>
-                    p.Name.Contains(SearchPhrase) ||
-                    p.City.CityName.Contains(SearchPhrase)
-                    ).ToList();
-                data.SearchString = SearchPhrase;
+            PersonViewModel model = new PersonViewModel(_personService.GetAll());
+            if (SearchPhrase != null) {
+                model.Persons = _personService.FindPeople(SearchPhrase);
+               
             }
-            else
-            {
-                data.SearchString = null;
-            }
+            
             return View(model);
         }
 
@@ -60,22 +55,15 @@ namespace Assignment_MVC.Controllers
         {
             
             List<Person> persons = new List<Person>();
-            persons = data.GetAll();
+            persons = _personService.GetAll();
             PersonViewModel model = new PersonViewModel(persons);
             if (ModelState.IsValid)
             {
-                Person p = new Person();
-                p.City = _context.Cities.First(n => n.CityName == input.newPerson.City);
-                p.Name = input.newPerson.Name;
-                p.PhoneNumber = input.newPerson.PhoneNumber;
-                p=_context.People.Add(p).Entity;
-                _context.SaveChanges();
-                //int personId = _context.People.Last(person=>person.Name==p.Name).id;
-                var language = new PersonLanguage();
-                language.LanguageName = input.newPerson.Language;
-                language.Personid = p.id;
-                _context.PersonLanguage.Add(language);
-                _context.SaveChanges();
+                _personService.CreatePerson(
+                    input.newPerson.Name,
+                    input.newPerson.City,
+                    input.newPerson.PhoneNumber,
+                    input.newPerson.Language);
                 
             }
             return RedirectToAction("Persons");
@@ -83,20 +71,14 @@ namespace Assignment_MVC.Controllers
 
         public IActionResult RemovePerson(int id)
         {
-            data.RemovePerson(id);
+            _personService.DeletePerson(id);
             return RedirectToAction("Persons");
         }
 
         [HttpPost]
         public IActionResult AddLanguage(Person person)
         {
-            var DataToAdd = new PersonLanguage();
-            DataToAdd.LanguageName = person.PersonLanguages[0].LanguageName;
-            DataToAdd.Personid = person.id;
-            if (_context.PersonLanguage.Find(DataToAdd.Personid, DataToAdd.LanguageName)==null) {
-                _context.PersonLanguage.Add(DataToAdd);
-                _context.SaveChanges();
-            }
+            _personLanguageServices.CreatePersonLanguage(person.PersonLanguages[0].LanguageId, person.id);
             
 
             return RedirectToAction("Persons");

@@ -9,6 +9,7 @@ namespace Assignment_MVC.Models
     public class Language
     {
         [Key]
+        public int LanguageId { get; set; }
         public string LanguageName { get; set; }
         public List<PersonLanguage> PersonLanguages { get; set; }
     }

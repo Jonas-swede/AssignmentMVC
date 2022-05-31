@@ -21,11 +21,13 @@ namespace Assignment_MVC.Migrations
                 name: "Language",
                 columns: table => new
                 {
-                    LanguageName = table.Column<string>(nullable: false)
+                    LanguageId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LanguageName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Language", x => x.LanguageName);
+                    table.PrimaryKey("PK_Language", x => x.LanguageId);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,17 +75,18 @@ namespace Assignment_MVC.Migrations
                 name: "PersonLanguage",
                 columns: table => new
                 {
-                    LanguageName = table.Column<string>(nullable: false),
-                    Personid = table.Column<int>(nullable: false)
+                    LanguageId = table.Column<int>(nullable: false),
+                    Personid = table.Column<int>(nullable: false),
+                    LanguageName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PersonLanguage", x => new { x.Personid, x.LanguageName });
+                    table.PrimaryKey("PK_PersonLanguage", x => new { x.Personid, x.LanguageId });
                     table.ForeignKey(
-                        name: "FK_PersonLanguage_Language_LanguageName",
-                        column: x => x.LanguageName,
+                        name: "FK_PersonLanguage_Language_LanguageId",
+                        column: x => x.LanguageId,
                         principalTable: "Language",
-                        principalColumn: "LanguageName",
+                        principalColumn: "LanguageId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PersonLanguage_People_Personid",
@@ -105,12 +108,12 @@ namespace Assignment_MVC.Migrations
 
             migrationBuilder.InsertData(
                 table: "Language",
-                column: "LanguageName",
-                values: new object[]
+                columns: new[] { "LanguageId", "LanguageName" },
+                values: new object[,]
                 {
-                    "English",
-                    "Svenska",
-                    "Norsk"
+                    { 1, "English" },
+                    { 2, "Svenska" },
+                    { 3, "Norsk" }
                 });
 
             migrationBuilder.InsertData(
@@ -145,13 +148,13 @@ namespace Assignment_MVC.Migrations
 
             migrationBuilder.InsertData(
                 table: "PersonLanguage",
-                columns: new[] { "Personid", "LanguageName" },
+                columns: new[] { "Personid", "LanguageId", "LanguageName" },
                 values: new object[,]
                 {
-                    { 1, "Svenska" },
-                    { 2, "Svenska" },
-                    { 2, "English" },
-                    { 3, "Norsk" }
+                    { 1, 2, null },
+                    { 2, 2, null },
+                    { 2, 1, null },
+                    { 3, 3, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -165,9 +168,9 @@ namespace Assignment_MVC.Migrations
                 column: "CityID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonLanguage_LanguageName",
+                name: "IX_PersonLanguage_LanguageId",
                 table: "PersonLanguage",
-                column: "LanguageName");
+                column: "LanguageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

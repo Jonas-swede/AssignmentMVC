@@ -6,26 +6,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Assignment_MVC.Services;
 
 namespace Assignment_MVC.Controllers
 {
     public class LanguageController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ILanguageServices _languageServices;
+        private readonly IPersonService _personService;
 
-        public LanguageController(ApplicationDbContext context)
+        //private readonly ApplicationDbContext _context;
+
+        public LanguageController(ILanguageServices languageServices,IPersonService personService)
         {
-            _context = context;
+            _languageServices = languageServices;
+            _personService = personService;
+            //_context = context;
         }
         public IActionResult Index()
         {
             LangaugeViewModel model = new LangaugeViewModel();
-            model.Languages = _context.Language.ToList();
-            model.People = _context.People.ToList();
-            foreach(var p in model.People)
-            {
-                p.PersonLanguages = _context.Set<PersonLanguage>().Where(l => l.Personid == p.id).ToList();
-            }
+            model.Languages = _languageServices.GetAll();
+            model.People = _personService.GetAll();
+           
             return View(model);
         }
 
@@ -37,20 +40,18 @@ namespace Assignment_MVC.Controllers
         [HttpPost]
         public IActionResult Create(Language language)
         {
-            if (_context.Language.Find(language.LanguageName) == null&&ModelState.IsValid)
+            if (_languageServices.GetLanguage(language.LanguageId) == null&&ModelState.IsValid)
             {
-                _context.Language.Add(language);
-                _context.SaveChanges();
+                _languageServices.CreateLanguage(language);
+                
             }
             return RedirectToAction("Index");
         }
 
 
-        public IActionResult Remove(string languageName)
+        public IActionResult Remove(int languageId)
         {
-            var languageToRemove = _context.Language.Find(languageName);
-            _context.Language.Remove(languageToRemove);
-            _context.SaveChanges();
+            _languageServices.DeleteLanguage(languageId);
             return RedirectToAction("Index");
         }
 

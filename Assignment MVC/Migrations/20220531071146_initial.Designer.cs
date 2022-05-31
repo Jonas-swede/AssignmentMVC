@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment_MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220527095059_initial")]
+    [Migration("20220531071146_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,24 +86,32 @@ namespace Assignment_MVC.Migrations
 
             modelBuilder.Entity("Assignment_MVC.Models.Language", b =>
                 {
-                    b.Property<string>("LanguageName")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("LanguageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("LanguageName");
+                    b.Property<string>("LanguageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LanguageId");
 
                     b.ToTable("Language");
 
                     b.HasData(
                         new
                         {
+                            LanguageId = 1,
                             LanguageName = "English"
                         },
                         new
                         {
+                            LanguageId = 2,
                             LanguageName = "Svenska"
                         },
                         new
                         {
+                            LanguageId = 3,
                             LanguageName = "Norsk"
                         });
                 });
@@ -159,12 +167,15 @@ namespace Assignment_MVC.Migrations
                     b.Property<int>("Personid")
                         .HasColumnType("int");
 
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("LanguageName")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Personid", "LanguageName");
+                    b.HasKey("Personid", "LanguageId");
 
-                    b.HasIndex("LanguageName");
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("PersonLanguage");
 
@@ -172,22 +183,22 @@ namespace Assignment_MVC.Migrations
                         new
                         {
                             Personid = 1,
-                            LanguageName = "Svenska"
+                            LanguageId = 2
                         },
                         new
                         {
                             Personid = 2,
-                            LanguageName = "Svenska"
+                            LanguageId = 2
                         },
                         new
                         {
                             Personid = 2,
-                            LanguageName = "English"
+                            LanguageId = 1
                         },
                         new
                         {
                             Personid = 3,
-                            LanguageName = "Norsk"
+                            LanguageId = 3
                         });
                 });
 
@@ -211,7 +222,7 @@ namespace Assignment_MVC.Migrations
                 {
                     b.HasOne("Assignment_MVC.Models.Language", "Language")
                         .WithMany("PersonLanguages")
-                        .HasForeignKey("LanguageName")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

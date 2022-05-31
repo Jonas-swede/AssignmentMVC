@@ -27,7 +27,7 @@ namespace Assignment_MVC.Data
                 .WithMany(p => p.People)
                 .HasForeignKey(k => k.CityID);
 
-            modelBuilder.Entity<PersonLanguage>().HasKey(k => new { k.Personid, k.LanguageName });
+            modelBuilder.Entity<PersonLanguage>().HasKey(k => new { k.Personid, k.LanguageId });
             modelBuilder.Entity<PersonLanguage>()
                 .HasOne(pl => pl.Person)
                 .WithMany(p => p.PersonLanguages)
@@ -35,7 +35,7 @@ namespace Assignment_MVC.Data
             modelBuilder.Entity<PersonLanguage>()
                 .HasOne(l => l.Language)
                 .WithMany(l => l.PersonLanguages)
-                .HasForeignKey(k => k.LanguageName);
+                .HasForeignKey(k => k.LanguageId);
 
             modelBuilder.Entity<Country>().HasData(new Country { CountryName = "Sverige" });
             modelBuilder.Entity<Country>().HasData(new Country { CountryName = "Norge" });
@@ -52,14 +52,14 @@ namespace Assignment_MVC.Data
             modelBuilder.Entity<Person>().HasData(new Person { id = 3, Name = "Börje", CityID = 2, PhoneNumber = "016161814" });
 
 
-            modelBuilder.Entity<Language>().HasData(new Language { LanguageName = "English" });
-            modelBuilder.Entity<Language>().HasData(new Language { LanguageName = "Svenska" });
-            modelBuilder.Entity<Language>().HasData(new Language { LanguageName = "Norsk" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 1,LanguageName = "English" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 2, LanguageName = "Svenska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 3, LanguageName = "Norsk" });
 
-            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 1, LanguageName = "Svenska" });
-            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 2, LanguageName = "Svenska" });
-            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 2, LanguageName = "English" });
-            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 3, LanguageName = "Norsk" });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 1, LanguageId = 2 });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 2, LanguageId = 2 });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 2, LanguageId = 1 });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 3, LanguageId = 3 });
 
 
 
