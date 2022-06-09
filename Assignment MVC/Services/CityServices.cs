@@ -10,18 +10,25 @@ namespace Assignment_MVC.Services
     public class CityServices : ICityServices
     {
         private readonly ApplicationDbContext _context;
-        public CityServices(ApplicationDbContext context)
+        private readonly ICountryServices _countryServices;
+
+        public CityServices(ApplicationDbContext context,ICountryServices countryServices)
         {
             _context = context;
-        }
-        public bool CreateCity()
-        {
-            throw new NotImplementedException();
+            _countryServices = countryServices;
         }
 
-        public bool DeleteCity(string name)
+        public bool CreateCity(City city)
         {
-            throw new NotImplementedException();
+            _context.Cities.Add(city);
+            return _context.SaveChanges() > 0 ? true : false;
+        }
+
+        public bool DeleteCity(int CityId)
+        {
+            var cityToRemove = GetCity(CityId);
+            _context.Remove(cityToRemove);
+            return _context.SaveChanges() > 0 ? true : false;
         }
 
         public List<City> GetAll()
@@ -29,19 +36,31 @@ namespace Assignment_MVC.Services
             return _context.Set<City>().ToList();
         }
 
-        public City GetCity(string name)
+        public City GetCity(int CityId)
         {
-            throw new NotImplementedException();
+            var city = _context.Cities.Find(CityId);
+            city.CountryName = _countryServices.FindById(city.CountryId).CountryName;
+            return city;
         }
 
-        public List<City> Search()
+        public List<City> Search(string SearchPhrase)
         {
-            throw new NotImplementedException();
+            var cities = _context.Set<City>().Where(c=>
+            c.CityName.Contains(SearchPhrase)||
+            c.CountryName.Contains(SearchPhrase)
+            ).ToList();
+            return cities;
         }
 
         public bool UpdateCity(City c)
         {
-            throw new NotImplementedException();
+            var CityToUpdate = GetCity(c.CityID);
+            _context.Cities.Update(CityToUpdate);
+            if (c.CityName != null) CityToUpdate.CityName = c.CityName;
+            if (c.CountryName != null) CityToUpdate.CountryName = c.CountryName;
+            if (c.CountryId != 0) CityToUpdate.CountryId = c.CountryId;
+            if (c.People!=null&&c.People.Count >0) CityToUpdate.People = c.People;
+            return _context.SaveChanges() > 0 ? true : false;
         }
     }
 }

@@ -2,30 +2,31 @@
 using Assignment_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Assignment_MVC.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Assignment_MVC.Controllers
 {
-    
+    [Authorize(Roles = "Admin")]
 
-    
+
     public class CountriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public CountriesController(ApplicationDbContext context)
+        private readonly ICountryServices _countryServices;
+
+        public CountriesController(ApplicationDbContext context, ICountryServices countryServices)
         {
             _context = context;
+            _countryServices = countryServices;
         }
         public IActionResult Index()
         {
-            return View(_context.Countries.ToList());
+            return View(_countryServices.GetAll());
         }
         public IActionResult Create()
         {
-            ViewData["CountryName"] = new SelectList(_context.Countries, "CountryName", "CountryName");
+            ViewData["CountryName"] = new SelectList(_countryServices.GetAll(), "CountryName", "CountryName");
             return View();
         }
 
@@ -34,12 +35,31 @@ namespace Assignment_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(country);
-                _context.SaveChanges();
+                _countryServices.CreateCountry(country);
                 return RedirectToAction(nameof(Index));
             }
             return View(country);
         }
+
+        public IActionResult EditCountry(int CountryId)
+        {
+            var country = _countryServices.FindById(CountryId);
+            return View(country);
+        }
+
+        [HttpPost]
+        public IActionResult EditCountry(Country country)
+        {
+            _countryServices.UpdateCountry(country);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult RemoveCountry(int CountryId)
+        {
+            _countryServices.DeleteCountry(CountryId);
+            return RedirectToAction("Index");
+        }
+
     }
 
     

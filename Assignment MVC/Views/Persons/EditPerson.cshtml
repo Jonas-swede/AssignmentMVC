@@ -1,0 +1,68 @@
+﻿@model Assignment_MVC.Models.Person
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EditPerson</title>
+</head>
+<body>
+
+<h4>Person</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditPerson">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CityID" class="control-label"></label>
+                <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityName"></select>
+                <span asp-validation-for="CityID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+        <br />
+        <h5>Languages</h5>
+        <div class="col-sm">
+            <p>
+                @foreach (PersonLanguage pl in Model.PersonLanguages)
+                {
+                    <p>
+                    @pl.LanguageName
+                    @Html.ActionLink("Remove language","RemoveLanguage", new {Model.id, pl.LanguageId})
+                    </p>
+                }
+            </p>
+            <h5>Add new language</h5>
+            <form asp-action="AddLanguage" method="post">
+                @Html.HiddenFor(m => Model.id)
+                <select name="LanguageId" class="form-control" asp-items="ViewBag.Languages"></select>
+                <input type="submit" value="Add language" class="btn btn-secondary" />
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Persons">Back to List</a>
+</div>
+
+</body>
+</html>

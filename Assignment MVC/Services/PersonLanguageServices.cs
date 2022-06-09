@@ -30,21 +30,31 @@ namespace Assignment_MVC.Services
                 Personid = personId,
                 Person = _personService.ReadPerson(personId)
             };
-            _context.PersonLanguage.Add(personLanguageToAdd);
+            if(Find(languageId,personId)==null)_context.PersonLanguage.Add(personLanguageToAdd);
             return _context.SaveChanges()>0?true:false;
             
         }
 
-        public bool DeletePersonLanguage(PersonLanguage personLanguage)
+        public bool DeletePersonLanguage(int languageId, int personId)
         {
-            var personLanguageToDelete = Find(personLanguage.LanguageId, personLanguage.Personid);
+            var personLanguageToDelete = Find(languageId, personId);
             _context.Remove(personLanguageToDelete);
             return _context.SaveChanges() > 0 ? true : false;
         }
 
         public PersonLanguage Find(int languageId, int personId)
         {
-            return _context.PersonLanguage.Find(languageId, personId);
+            PersonLanguage test = new PersonLanguage() {Personid=1,LanguageId=2 };
+            PersonLanguage test2 = new PersonLanguage() { Personid = 2, LanguageId = 1 };
+
+            var testresult = _context.PersonLanguage.Find(test.Personid,test.LanguageId);
+            var testresult2 = _context.PersonLanguage.Find(test2.Personid,test2.LanguageId);
+            return _context.PersonLanguage.Where(l => l.LanguageId == languageId && l.Personid == personId).SingleOrDefault();
+        }
+
+        public PersonLanguage Find(PersonLanguage personLanguage)
+        {
+            return _context.PersonLanguage.Find(personLanguage);
         }
 
         public List<PersonLanguage> GetAll()
@@ -63,7 +73,12 @@ namespace Assignment_MVC.Services
 
         public bool UpdatePersonLanguage(PersonLanguage personLanguage)
         {
-            throw new NotImplementedException();
+            var personLanguageToUpdate = Find(personLanguage);
+            if (personLanguage.LanguageName != null) personLanguageToUpdate.LanguageName = personLanguage.LanguageName;
+            if (personLanguage.Language != null) personLanguageToUpdate.Language = personLanguage.Language;
+            if (personLanguage.Person != null) personLanguageToUpdate.Person = personLanguage.Person;
+            return _context.SaveChanges() > 0 ? true : false;
         }
     }
+    
 }

@@ -98,7 +98,7 @@ table {
     justify-content:center;
 }
 form {
-    text-align:right;
+    text-align:left;
 }
 
 
@@ -111,6 +111,4 @@ form {
     text-align:left;
 }
 
-select {
-    float:right;
-}
+

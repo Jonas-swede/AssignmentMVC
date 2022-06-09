@@ -15,6 +15,7 @@ namespace Assignment_MVC.Models
         public string CityName { get; set; }
         [Display(Name = "Country")]
         public string CountryName { get; set; }
+        public int CountryId { get; set; }
         public Country Country { get; set; } 
         public List<Person> People { get; set; }
     }

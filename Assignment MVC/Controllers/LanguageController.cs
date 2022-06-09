@@ -7,24 +7,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Assignment_MVC.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Assignment_MVC.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class LanguageController : Controller
     {
+        
         private readonly ILanguageServices _languageServices;
         private readonly IPersonService _personService;
+        private readonly IPersonLanguageServices _personLanguageServices;
 
-        //private readonly ApplicationDbContext _context;
-
-        public LanguageController(ILanguageServices languageServices,IPersonService personService)
+        public LanguageController(ILanguageServices languageServices,IPersonService personService,IPersonLanguageServices personLanguageServices)
         {
             _languageServices = languageServices;
             _personService = personService;
-            //_context = context;
+            _personLanguageServices = personLanguageServices;
         }
         public IActionResult Index()
         {
+            ViewData["Languages"] = new SelectList(_languageServices.GetAll(), "LanguageName", "LanguageName");
             LangaugeViewModel model = new LangaugeViewModel();
             model.Languages = _languageServices.GetAll();
             model.People = _personService.GetAll();
@@ -55,6 +58,28 @@ namespace Assignment_MVC.Controllers
             return RedirectToAction("Index");
         }
 
-        
+        public IActionResult AddLanguage(LangaugeViewModel langaugeView)
+        {
+            var langaugeId = _languageServices.GetLanguageByName(langaugeView.NewLanguageName).LanguageId;
+            _personLanguageServices.CreatePersonLanguage(langaugeId, langaugeView.NewLanguagePersonId);
+
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult EditLanguage(int LanguageId)
+        {
+            var language = _languageServices.GetLanguage(LanguageId);
+            return View(language);
+        }
+
+        [HttpPost]
+        public IActionResult EditLanguage(Language language)
+        {
+            _languageServices.UpdateLanguage(language);
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

@@ -10,12 +10,16 @@ namespace Assignment_MVC.Services
     public class PersonService : IPersonService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILanguageServices _languageServices;
+        private readonly ICityServices _cityServices;
 
-        public PersonService(ApplicationDbContext context)
+        public PersonService(ApplicationDbContext context,ILanguageServices languageServices,ICityServices cityServices)
         {
             _context = context;
+            _languageServices = languageServices;
+            _cityServices = cityServices;
         }
-        public bool CreatePerson(string Name, string City, string PhoneNumber, string FirstLanguage)
+        public bool CreatePerson(string Name, string City, string PhoneNumber, int FirstLanguage)
         {
             Person p = new Person();
             p.Name = Name;
@@ -24,8 +28,9 @@ namespace Assignment_MVC.Services
             _context.People.Add(p);
             var saved=_context.SaveChanges();
             var language = new PersonLanguage();
-            language.LanguageName = FirstLanguage;
+            language.LanguageId = FirstLanguage;
             language.Personid = p.id;
+
             _context.PersonLanguage.Add(language);
             saved+=_context.SaveChanges();
 
@@ -59,6 +64,7 @@ namespace Assignment_MVC.Services
         public Person ReadPerson(int id)
         {
             var Person = _context.People.Find(id);
+            Person.PersonLanguages = _context.Set<PersonLanguage>().Where(l => l.Personid == Person.id).ToList();
             return Person;
         }
 
@@ -67,8 +73,12 @@ namespace Assignment_MVC.Services
             var returnList = _context.Set<Person>().ToList();
             foreach (Person p in returnList)
             {
-                p.City = _context.Cities.Find(p.CityID);
+                p.City = _cityServices.GetCity(p.CityID);
                 p.PersonLanguages = _context.Set<PersonLanguage>().Where(l => l.Personid == p.id).ToList();
+                foreach(PersonLanguage l in p.PersonLanguages)
+                {
+                    l.LanguageName = _context.Language.Find(l.LanguageId).LanguageName;
+                }
             }
             return returnList;
         }
@@ -78,10 +88,12 @@ namespace Assignment_MVC.Services
             var PersonToUpdate = _context.People.Find(p.id);
             if (PersonToUpdate != null)
             {
-                PersonToUpdate.Name = p.Name != null ? p.Name : PersonToUpdate.Name;
-                PersonToUpdate.PersonLanguages = p.PersonLanguages != null ? p.PersonLanguages : PersonToUpdate.PersonLanguages;
-
+                _context.People.Update(PersonToUpdate);
+                PersonToUpdate.PhoneNumber = p.PhoneNumber;
+                PersonToUpdate.Name = p.Name;
+                PersonToUpdate.CityID = p.CityID;
                 return _context.SaveChanges() > 0 ? true : false;
+                
             }
             else return false;
         }

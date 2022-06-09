@@ -16,11 +16,20 @@
             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
             <li>@Html.ActionLink("Guessing game", "GuessingGame", "GuessingGame")</li>
             <li>@Html.ActionLink("Fever check", "Fever", "FeverCheck")</li>
-            <li>@Html.ActionLink("Persons", "Persons", "Persons")</li>
-            <li>@Html.ActionLink("AJAX", "Index", "AJAXPersons")</li>
-            <li>@Html.ActionLink("Countries", "Index", "Countries")</li>
-            <li>@Html.ActionLink("Cities", "Index", "Cities")</li>
-            <li>@Html.ActionLink("Languages", "Index", "Language")</li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li>@Html.ActionLink("Persons", "Persons", "Persons")</li>
+                <li>@Html.ActionLink("AJAX", "Index", "AJAXPersons")</li>
+                if (User.IsInRole("Admin"))
+                {
+                    <li>@Html.ActionLink("Countries", "Index", "Countries")</li>
+                    <li>@Html.ActionLink("Cities", "Index", "Cities")</li>
+                    <li>@Html.ActionLink("Languages", "Index", "Language")</li>
+                }
+        
+        }
+        <partial name="_LoginPartial" />
+
         </ul>
     </div>
     
@@ -31,5 +40,6 @@
             <p>@DateTime.Now.ToShortDateString() - Jonas Carlsson</p>
         </footer>
     </div>
+    @RenderSection("Scripts", required:false)
 </body>
 </html>

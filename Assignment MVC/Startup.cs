@@ -1,7 +1,9 @@
 using Assignment_MVC.Data;
+using Assignment_MVC.Models;
 using Assignment_MVC.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,12 +33,17 @@ namespace Assignment_MVC
             });
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IPersonData, PersonData>();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<IPersonService, PersonService>();
             services.AddTransient<ICityServices, CityServices>();
             services.AddTransient<ILanguageServices, LanguageServices>();
             services.AddTransient<IPersonLanguageServices, PersonLanguageServices>();
+            services.AddTransient<ICountryServices, CountryServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,7 +60,8 @@ namespace Assignment_MVC
 
             app.UseRouting();
 
-            
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -90,9 +98,11 @@ namespace Assignment_MVC
                     name: "Languages",
                     pattern: "{controller=Language}/{action=Index}/{id?}"
                     );
-                
+                endpoints.MapRazorPages();
 
             });
         }
+
+        
     }
 }

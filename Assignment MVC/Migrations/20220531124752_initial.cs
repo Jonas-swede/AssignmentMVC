@@ -10,11 +10,13 @@ namespace Assignment_MVC.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    CountryName = table.Column<string>(nullable: false)
+                    CountryId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CountryName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Countries", x => x.CountryName);
+                    table.PrimaryKey("PK_Countries", x => x.CountryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -37,17 +39,18 @@ namespace Assignment_MVC.Migrations
                     CityID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CityName = table.Column<string>(nullable: true),
-                    CountryName = table.Column<string>(nullable: true)
+                    CountryName = table.Column<string>(nullable: true),
+                    CountryId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cities", x => x.CityID);
                     table.ForeignKey(
-                        name: "FK_Cities_Countries_CountryName",
-                        column: x => x.CountryName,
+                        name: "FK_Cities_Countries_CountryId",
+                        column: x => x.CountryId,
                         principalTable: "Countries",
-                        principalColumn: "CountryName",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CountryId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,12 +101,12 @@ namespace Assignment_MVC.Migrations
 
             migrationBuilder.InsertData(
                 table: "Countries",
-                column: "CountryName",
-                values: new object[]
+                columns: new[] { "CountryId", "CountryName" },
+                values: new object[,]
                 {
-                    "Sverige",
-                    "Norge",
-                    "Finland"
+                    { 1, "Sverige" },
+                    { 2, "Norge" },
+                    { 3, "Finland" }
                 });
 
             migrationBuilder.InsertData(
@@ -118,18 +121,18 @@ namespace Assignment_MVC.Migrations
 
             migrationBuilder.InsertData(
                 table: "Cities",
-                columns: new[] { "CityID", "CityName", "CountryName" },
-                values: new object[] { 1, "Stockholm", "Sverige" });
+                columns: new[] { "CityID", "CityName", "CountryId", "CountryName" },
+                values: new object[] { 1, "Stockholm", 1, null });
 
             migrationBuilder.InsertData(
                 table: "Cities",
-                columns: new[] { "CityID", "CityName", "CountryName" },
-                values: new object[] { 2, "Göteborg", "Sverige" });
+                columns: new[] { "CityID", "CityName", "CountryId", "CountryName" },
+                values: new object[] { 2, "Göteborg", 1, null });
 
             migrationBuilder.InsertData(
                 table: "Cities",
-                columns: new[] { "CityID", "CityName", "CountryName" },
-                values: new object[] { 3, "Oslo", "Norge" });
+                columns: new[] { "CityID", "CityName", "CountryId", "CountryName" },
+                values: new object[] { 3, "Oslo", 2, null });
 
             migrationBuilder.InsertData(
                 table: "People",
@@ -158,9 +161,9 @@ namespace Assignment_MVC.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cities_CountryName",
+                name: "IX_Cities_CountryId",
                 table: "Cities",
-                column: "CountryName");
+                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_People_CityID",

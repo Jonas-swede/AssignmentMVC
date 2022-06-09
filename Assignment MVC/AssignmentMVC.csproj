@@ -20,16 +20,21 @@
     <Compile Remove="Migrations\20220524092751_initial.Designer.cs" />
     <Compile Remove="Migrations\20220525121838_Added seed data for languges and personlanguages.cs" />
     <Compile Remove="Migrations\20220525121838_Added seed data for languges and personlanguages.Designer.cs" />
+    <Compile Remove="Migrations\20220531124539_initial.cs" />
+    <Compile Remove="Migrations\20220531124539_initial.Designer.cs" />
+    <Compile Remove="Migrations\20220607162520_Seeded admin with correct username 2.cs" />
+    <Compile Remove="Migrations\20220607162520_Seeded admin with correct username 2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Google.Api.CommonProtos" Version="2.5.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="3.0.50813.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.25" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.25" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.25">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

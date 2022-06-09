@@ -1,4 +1,6 @@
 ﻿using Assignment_MVC.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Assignment_MVC.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :base(options)
         {
@@ -20,7 +22,7 @@ namespace Assignment_MVC.Data
             modelBuilder.Entity<City>()
                 .HasOne(c => c.Country)
                 .WithMany(ci => ci.Cities)
-                .HasForeignKey(k => k.CountryName);
+                .HasForeignKey(k => k.CountryId);
 
             modelBuilder.Entity<Person>()
                 .HasOne(c => c.City)
@@ -37,14 +39,14 @@ namespace Assignment_MVC.Data
                 .WithMany(l => l.PersonLanguages)
                 .HasForeignKey(k => k.LanguageId);
 
-            modelBuilder.Entity<Country>().HasData(new Country { CountryName = "Sverige" });
-            modelBuilder.Entity<Country>().HasData(new Country { CountryName = "Norge" });
-            modelBuilder.Entity<Country>().HasData(new Country { CountryName = "Finland" });
+            modelBuilder.Entity<Country>().HasData(new Country { CountryId = 1, CountryName = "Sverige" });
+            modelBuilder.Entity<Country>().HasData(new Country { CountryId = 2, CountryName = "Norge" });
+            modelBuilder.Entity<Country>().HasData(new Country { CountryId = 3, CountryName = "Finland" });
 
 
-            modelBuilder.Entity<City>().HasData(new City { CityName = "Stockholm", CityID = 1, CountryName = "Sverige" });
-            modelBuilder.Entity<City>().HasData(new City { CityName = "Göteborg", CityID = 2, CountryName = "Sverige" });
-            modelBuilder.Entity<City>().HasData(new City { CityName = "Oslo", CityID = 3, CountryName = "Norge" });
+            modelBuilder.Entity<City>().HasData(new City { CityName = "Stockholm", CityID = 1, CountryId = 1 });
+            modelBuilder.Entity<City>().HasData(new City { CityName = "Göteborg", CityID = 2, CountryId = 1 });
+            modelBuilder.Entity<City>().HasData(new City { CityName = "Oslo", CityID = 3, CountryId = 2 });
 
 
             modelBuilder.Entity<Person>().HasData(new Person { id = 1, Name = "Kalle",CityID=1, PhoneNumber = "01234562" });
@@ -61,10 +63,41 @@ namespace Assignment_MVC.Data
             modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 2, LanguageId = 1 });
             modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { Personid = 3, LanguageId = 3 });
 
+            string adminRoleId = Guid.NewGuid().ToString();
+            string userRoleId = Guid.NewGuid().ToString();
+            string userId = Guid.NewGuid().ToString();
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole() { Id = adminRoleId, Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole() { Id = userRoleId, Name = "User", NormalizedName = "USER" }
+                );
+            ApplicationUser user = new ApplicationUser()
+            {
+                Id = userId,
+                UserName = "admin@gmail.com",
+                NormalizedUserName="ADMIN@GMAIL.COM",
+                Email = "admin@gmail.com",
+                NormalizedEmail="ADMIN@GMAIL.COM",
+                LockoutEnabled = false,
+                PhoneNumber = "1234567890"
+            };
+            
+
+            PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
+            user.PasswordHash=passwordHasher.HashPassword(user, "Admin123!");
+
+            modelBuilder.Entity<ApplicationUser>().HasData(user);
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>() { RoleId = adminRoleId, UserId = userId }
+                );
+
 
 
 
             base.OnModelCreating(modelBuilder);
+        
+
+        
         }
 
         public DbSet<Person> People { get; set; }
@@ -75,6 +108,7 @@ namespace Assignment_MVC.Data
 
         public DbSet<PersonLanguage> PersonLanguage { get; set; }
        
+
         
     }
 }

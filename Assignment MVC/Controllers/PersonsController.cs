@@ -1,6 +1,7 @@
 ﻿using Assignment_MVC.Data;
 using Assignment_MVC.Models;
 using Assignment_MVC.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Assignment_MVC.Controllers
 {
+    [Authorize]
     public class PersonsController : Controller
     {
         private readonly IPersonService _personService;
@@ -30,7 +32,7 @@ namespace Assignment_MVC.Controllers
         public IActionResult Persons()
         {
             ViewData["CityName"] = new SelectList(_cityServices.GetAll(), "CityName", "CityName");
-            ViewData["Languages"] = new SelectList(_languageServices.GetAll(), "LanguageName", "LanguageName");
+            ViewData["Languages"] = new SelectList(_languageServices.GetAll(), "LanguageId", "LanguageName");
             List<Person> persons = new List<Person>();
             persons = _personService.GetAll();
             
@@ -63,7 +65,7 @@ namespace Assignment_MVC.Controllers
                     input.newPerson.Name,
                     input.newPerson.City,
                     input.newPerson.PhoneNumber,
-                    input.newPerson.Language);
+                    input.newPerson.LanguageId);
                 
             }
             return RedirectToAction("Persons");
@@ -76,15 +78,37 @@ namespace Assignment_MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddLanguage(Person person)
+        public IActionResult AddLanguage(Person person, int LanguageId)
         {
-            _personLanguageServices.CreatePersonLanguage(person.PersonLanguages[0].LanguageId, person.id);
+            
+            _personLanguageServices.CreatePersonLanguage(LanguageId, person.id);
             
 
-            return RedirectToAction("Persons");
+            return RedirectToAction("EditPerson",new {person.id });
         }
 
-        
-        
+       
+        public IActionResult RemoveLanguage(int id, int LanguageId)
+        {
+            _personLanguageServices.DeletePersonLanguage(LanguageId,id);
+            return RedirectToAction("EditPerson", new { id });
+        }
+
+
+        [HttpGet]
+        public IActionResult EditPerson(int id)
+        {
+            ViewData["CityName"] = new SelectList(_cityServices.GetAll(), "CityID", "CityName");
+            ViewData["Languages"] = new SelectList(_languageServices.GetAll(), "LanguageId", "LanguageName");
+            Person person = _personService.ReadPerson(id);
+            return View(person);
+        }
+        [HttpPost]
+        public IActionResult EditPerson(Person person,int LanguageId)
+        {
+            _personService.UpdatePerson(person);
+            return RedirectToAction("EditPerson",person.id);
+        }
     }
+
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment_MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220531071146_initial")]
+    [Migration("20220531124752_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,12 +30,15 @@ namespace Assignment_MVC.Migrations
                     b.Property<string>("CityName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CountryName")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CityID");
 
-                    b.HasIndex("CountryName");
+                    b.HasIndex("CountryId");
 
                     b.ToTable("Cities");
 
@@ -44,42 +47,50 @@ namespace Assignment_MVC.Migrations
                         {
                             CityID = 1,
                             CityName = "Stockholm",
-                            CountryName = "Sverige"
+                            CountryId = 1
                         },
                         new
                         {
                             CityID = 2,
                             CityName = "Göteborg",
-                            CountryName = "Sverige"
+                            CountryId = 1
                         },
                         new
                         {
                             CityID = 3,
                             CityName = "Oslo",
-                            CountryName = "Norge"
+                            CountryId = 2
                         });
                 });
 
             modelBuilder.Entity("Assignment_MVC.Models.Country", b =>
                 {
-                    b.Property<string>("CountryName")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CountryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("CountryName");
+                    b.Property<string>("CountryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CountryId");
 
                     b.ToTable("Countries");
 
                     b.HasData(
                         new
                         {
+                            CountryId = 1,
                             CountryName = "Sverige"
                         },
                         new
                         {
+                            CountryId = 2,
                             CountryName = "Norge"
                         },
                         new
                         {
+                            CountryId = 3,
                             CountryName = "Finland"
                         });
                 });
@@ -206,7 +217,9 @@ namespace Assignment_MVC.Migrations
                 {
                     b.HasOne("Assignment_MVC.Models.Country", "Country")
                         .WithMany("Cities")
-                        .HasForeignKey("CountryName");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Assignment_MVC.Models.Person", b =>

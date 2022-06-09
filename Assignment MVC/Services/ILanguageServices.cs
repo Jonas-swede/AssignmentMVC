@@ -9,7 +9,8 @@ namespace Assignment_MVC.Services
         bool DeleteLanguage(int languageId);
         List<Language> GetAll();
         Language GetLanguage(int languageId);
-        List<Language> Search();
+        Language GetLanguageByName(string name);
+        List<Language> Search(string searchTerm);
         bool UpdateLanguage(Language language);
     }
 }

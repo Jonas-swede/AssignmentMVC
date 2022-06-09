@@ -10,20 +10,20 @@
         @Model.PhoneNumber
     </div>
     <div class="col-sm">
+        @Model.City.Country.CountryName
+    </div>
+    <div class="col-sm">
         <p>
             @foreach (PersonLanguage pl in Model.PersonLanguages)
             {
-            @pl.LanguageName<br />
-        }</p>
+                @pl.LanguageName<br />
+            }
+        </p>
+        
 
-        <h5>Add new language</h5>
-        <form asp-action="AddLanguage" method="post">
-            <select asp-for="@Model.PersonLanguages[0].LanguageId" class="form-control" asp-items="ViewBag.Languages"></select>
-            @Html.HiddenFor(p => p.id)
-            <input type="submit" value="Add langauge" class="btn btn-secondary" />
-        </form>
     </div>
     <div class="col-sm">
-        @Html.ActionLink("Remove person", "RemovePerson", new { Model.id })
+        @Html.ActionLink("Remove person", "RemovePerson", new { Model.id })<br />
+        @Html.ActionLink("Edit person", "EditPerson", new {Model.id})
     </div>
 </div>

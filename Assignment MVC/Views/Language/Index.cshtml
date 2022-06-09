@@ -16,36 +16,15 @@
             {
                 <tr>
                     <td>@item.LanguageName</td>
-                    <td><a asp-action="Remove" asp-route-languageId="@item.LanguageId">Remove language</a></td>
+                    <td>
+                        <a asp-action="Remove" asp-route-languageId="@item.LanguageId">Remove language</a><br />
+                        <a asp-action="EditLanguage" asp-route-LanguageId="@item.LanguageId">Edit langauge</a>
+                    </td>
                 </tr>
             }
     </tbody>
 </table>
 
 <p></p>
-<h1>Persons</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Person</th>
-            <th>Languages</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var item in Model.People)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>
-                        @foreach (var lang in item.PersonLanguages)
-                        {
-                            <p>@lang.LanguageName</p>
-                        }
-                    </td>
-                    
-                </tr>
-            }
-    </tbody>
-</table>
 

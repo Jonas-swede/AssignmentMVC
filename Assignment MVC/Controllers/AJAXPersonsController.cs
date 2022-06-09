@@ -11,12 +11,10 @@ namespace Assignment_MVC.Controllers
     {
         public readonly ApplicationDbContext _context;
         private readonly IPersonService _personService;
-        private readonly PersonData data;
         public AJAXPersonsController(ApplicationDbContext context, IPersonService personService)
         {
             _context = context;
             _personService = personService;
-            data = new PersonData(_context);
         }
 
         public ActionResult Index()
