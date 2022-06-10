@@ -98,6 +98,10 @@ namespace Assignment_MVC
                     name: "Languages",
                     pattern: "{controller=Language}/{action=Index}/{id?}"
                     );
+                endpoints.MapControllerRoute(
+                    name: "Users",
+                    pattern: "{controller=User}/{action=Index}/{id?}"
+                    );
                 endpoints.MapRazorPages();
 
             });
