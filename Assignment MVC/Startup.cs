@@ -23,6 +23,14 @@ namespace Assignment_MVC
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowReact",
+                    policy =>
+                    {
+                        policy.WithOrigins("*");
+                    });
+            });
             services.AddMvc();
             services.AddSession(options =>
             {
@@ -49,6 +57,8 @@ namespace Assignment_MVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //app.UseCors("AllowReact");
+            app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -101,6 +111,10 @@ namespace Assignment_MVC
                 endpoints.MapControllerRoute(
                     name: "Users",
                     pattern: "{controller=User}/{action=Index}/{id?}"
+                    );
+                endpoints.MapControllerRoute(
+                    name: "Api",
+                    pattern: "{controller=API}/{action=GetPersons}/{id?}"
                     );
                 endpoints.MapRazorPages();
 

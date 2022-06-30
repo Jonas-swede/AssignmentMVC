@@ -41,7 +41,9 @@ namespace Assignment_MVC.Services
 
         public List<Country> GetAll()
         {
-            return _context.Set<Country>().ToList();
+            var countries = _context.Set<Country>().ToList();
+            
+            return countries;
         }
 
         public bool UpdateCountry(Country country)

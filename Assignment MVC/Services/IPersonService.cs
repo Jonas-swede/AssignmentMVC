@@ -10,6 +10,7 @@ namespace Assignment_MVC.Services
         Person ReadPerson(int id);
         List<Person> FindPeople(string SearchPhrase);
         List<Person> GetAll();
+        //string GetAllJson();
         bool UpdatePerson(Person p);
     }
 }

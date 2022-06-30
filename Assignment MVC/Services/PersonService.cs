@@ -97,6 +97,12 @@ namespace Assignment_MVC.Services
             }
             else return false;
         }
+
+        /*public string GetAllJson()
+        {
+            var persons = GetAll();
+            //JSON.stringify
+        }*/
     }
 
 }
